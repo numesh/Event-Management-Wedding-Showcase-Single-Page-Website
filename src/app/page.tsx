@@ -116,8 +116,9 @@ export default function Home() {
             transition={{ delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto"
           >
-            Luxury Event Planning & Wedding Excellence at <br/>
-            <span className="text-gold">DoubleTree by Hilton Weerawila Rajawarna Resort</span>
+            Luxury Event Planning & Wedding Excellence<br/>
+           <br/>
+            <span className="text-gold">Don't Miss Our Special Wedding Show Offers at DoubleTree by Hilton Weerawila Rajawarna Resort</span>
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -291,6 +292,7 @@ export default function Home() {
                 <label className="block text-sm font-medium mb-2">Interest</label>
                 <select name="interest" className="w-full bg-white/5 border border-gold/20 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all">
                   <option className="bg-black">Full Wedding Package</option>
+                  <option className="bg-black">Coordination</option>
                   <option className="bg-black">Photography & Videography</option>
                   <option className="bg-black">Decorations</option>
                   <option className="bg-black">Other Services</option>
@@ -349,11 +351,15 @@ export default function Home() {
           <div>
             <h4 className="text-xl font-bold mb-6">Contact Us</h4>
             <ul className="space-y-4 text-gray-400">
-              <li className="flex items-center gap-3">
-                <Phone className="text-gold w-5 h-5" /> +94 77 960 9907
+              <li>
+                <a href="tel:+94779609907" className="flex items-center gap-3 hover:text-gold transition-colors">
+                  <Phone className="text-gold w-5 h-5" /> +94 77 960 9907
+                </a>
               </li>
-              <li className="flex items-center gap-3">
-                <Mail className="text-gold w-5 h-5" /> asgardeventsl@gmail.com
+              <li>
+                <a href="mailto:asgardeventsl@gmail.com" className="flex items-center gap-3 hover:text-gold transition-colors">
+                  <Mail className="text-gold w-5 h-5" /> asgardeventsl@gmail.com
+                </a>
               </li>
             </ul>
           </div>
