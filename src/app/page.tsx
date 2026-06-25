@@ -15,11 +15,14 @@ import {
   Phone,
   Mail,
   MapPin,
-  MessageCircle
+  MessageCircle,
+  X,
+  Youtube
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { registerAction } from "./actions/register";
+import { AnimatePresence } from "framer-motion";
 
 const services = [
   { icon: <Calendar className="w-8 h-8" />, name: "Event Planning", desc: "Meticulous planning for your perfect day." },
@@ -36,14 +39,26 @@ const galleryImages = [
   "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800",
   "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
   "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=800",
-  "https://images.unsplash.com/photo-1465495910483-04104d2b234b?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=800",
   "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&q=80&w=800",
   "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&q=80&w=800",
 ];
 
 export default function Home() {
   const [formStatus, setFormStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  // Close modal on escape key
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedImage(null);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -146,33 +161,107 @@ export default function Home() {
       </section>
 
       {/* Gallery Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+      <section className="py-20 overflow-hidden">
+        <div className="max-w-6xl mx-auto px-4 mb-16">
+          <div className="text-center">
             <h2 className="text-4xl font-serif mb-4 text-gold">Visual Showcase</h2>
             <div className="h-1 w-20 bg-gold mx-auto" />
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {galleryImages.map((src, index) => (
-              <motion.div
+        </div>
+        
+        {/* Auto Animating Marquee */}
+        <div className="relative flex overflow-hidden w-full group">
+          <motion.div 
+            animate={{ x: [0, "-50%"] }}
+            transition={{ 
+              duration: 40, 
+              repeat: Infinity, 
+              ease: "linear",
+            }}
+            className="flex gap-4 w-max px-2"
+          >
+            {[...galleryImages, ...galleryImages].map((src, index) => (
+              <div
                 key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                whileHover={{ scale: 1.02 }}
-                className="relative h-80 rounded-xl overflow-hidden"
+                className="relative h-64 md:h-80 w-64 md:w-96 flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group/item"
+                onClick={() => setSelectedImage(src)}
               >
                 <Image 
                   src={src} 
                   alt={`Gallery ${index}`} 
                   fill 
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 group-hover/item:scale-110"
                 />
-              </motion.div>
+                <div className="absolute inset-0 bg-black/20 group-hover/item:bg-black/0 transition-colors" />
+              </div>
             ))}
-          </div>
+          </motion.div>
+        </div>
+
+        {/* Second Row (Reverse) */}
+        <div className="relative flex overflow-hidden w-full mt-4">
+          <motion.div 
+            animate={{ x: ["-50%", 0] }}
+            transition={{ 
+              duration: 45, 
+              repeat: Infinity, 
+              ease: "linear",
+            }}
+            className="flex gap-4 w-max px-2"
+          >
+            {[...galleryImages, ...galleryImages].map((src, index) => (
+              <div
+                key={`rev-${index}`}
+                className="relative h-64 md:h-80 w-64 md:w-96 flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group/item"
+                onClick={() => setSelectedImage(src)}
+              >
+                <Image 
+                  src={src} 
+                  alt={`Gallery Reverse ${index}`} 
+                  fill 
+                  className="object-cover transition-transform duration-500 group-hover/item:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover/item:bg-black/0 transition-colors" />
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <button 
+              className="absolute top-6 right-6 text-white hover:text-gold transition-colors"
+              onClick={() => setSelectedImage(null)}
+            >
+              <X className="w-10 h-10" />
+            </button>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-5xl w-full h-[80vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Image 
+                src={selectedImage} 
+                alt="Enlarged gallery view" 
+                fill 
+                className="object-contain"
+                priority
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Registration Section */}
       <section id="register" className="py-20 px-4 bg-[#0a0a0a] relative overflow-hidden">
@@ -266,9 +355,6 @@ export default function Home() {
               <li className="flex items-center gap-3">
                 <Mail className="text-gold w-5 h-5" /> asgardeventsl@gmail.com
               </li>
-              <li className="flex items-center gap-3">
-                <MapPin className="text-gold w-5 h-5" /> Rajawarna Wedding Experience 2026
-              </li>
             </ul>
           </div>
 
@@ -281,8 +367,11 @@ export default function Home() {
               <a href="https://whatsapp.com/channel/0029Vb0CrfAJENxzGYPkR71L" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-gold hover:text-black transition-all">
                 <MessageCircle className="w-6 h-6" />
               </a>
-              <a href="#" className="p-3 bg-white/5 rounded-full hover:bg-gold hover:text-black transition-all">
+              <a href="https://www.instagram.com/asgardevents?igsh=cmQ2dnl2NWFka3Vv" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-gold hover:text-black transition-all">
                 <Instagram className="w-6 h-6" />
+              </a>
+              <a href="https://www.youtube.com/@AsgardEvent" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-gold hover:text-black transition-all">
+                <Youtube className="w-6 h-6" />
               </a>
               <a href="https://www.tiktok.com/@asgardevents" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-gold hover:text-black transition-all flex items-center justify-center font-bold">
                 <span className="text-xs">TikTok</span>
