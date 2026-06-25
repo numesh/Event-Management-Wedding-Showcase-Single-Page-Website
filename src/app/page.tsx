@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, useInView } from "framer-motion";
 import { 
   Camera, 
   Video, 
@@ -20,9 +20,8 @@ import {
   Youtube
 } from "lucide-react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { registerAction } from "./actions/register";
-import { AnimatePresence } from "framer-motion";
 
 const services = [
   { icon: <Calendar className="w-8 h-8" />, name: "Event Planning", desc: "Meticulous planning for your perfect day." },
@@ -50,6 +49,23 @@ export default function Home() {
   const [formStatus, setFormStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [showBanner, setShowBanner] = useState(true);
+  
+  const servicesRef = useRef(null);
+  const { scrollY } = useScroll();
+  const isServicesInView = useInView(servicesRef, { amount: 0.1 });
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest === 0) {
+      setShowBanner(true);
+    }
+  });
+
+  useEffect(() => {
+    if (isServicesInView) {
+      setShowBanner(false);
+    }
+  }, [isServicesInView]);
 
   // Close modal on escape key
   useEffect(() => {
@@ -80,13 +96,17 @@ export default function Home() {
   return (
     <main className="relative">
       {/* Sticky Offer Banner */}
-      <motion.div
-          initial={{ y: -100 }}
-          animate={{ y: 0 }}
-          className="fixed top-0 left-0 right-0 z-50 bg-gold text-black py-2 px-4 text-center font-bold shadow-lg"
-      >
-        🎁 Special Wedding Show Offer: 1st 10 couples registered for a Full Wedding Package get a FREE Pre-shoot coverage!
-      </motion.div>
+      <AnimatePresence>
+        {showBanner && (
+            <motion.div
+                initial={{ y: -100 }}
+                animate={{ y: 0 }}
+                className="fixed top-0 left-0 right-0 z-50 bg-gold text-black py-2 px-4 text-center font-bold shadow-lg"
+            >
+              🎁 Special Wedding Show Offer: 1st 10 couples registered for a Full Wedding Package get a FREE Pre-shoot coverage!
+            </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Hero Section */}
       <section className="min-h-screen relative flex items-center justify-center overflow-hidden pt-22 pb-2 md:pt-0 md:pb-0">
@@ -106,6 +126,7 @@ export default function Home() {
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="text-5xl md:text-8xl font-serif mb-4"
           >
@@ -122,6 +143,7 @@ export default function Home() {
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto"
           >
@@ -132,6 +154,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.8 }}
             className="mt-10 flex flex-col items-center gap-6"
           >
@@ -150,7 +173,7 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 px-4 bg-[#0a0a0a]">
+      <section id="services" ref={servicesRef} className="py-20 px-4 bg-[#0a0a0a]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-serif mb-4 text-gold">Our Services</h2>
@@ -163,6 +186,7 @@ export default function Home() {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ delay: index * 0.1 }}
                 className="p-6 rounded-2xl border border-gold/20 bg-black/40 hover:border-gold/50 transition-all group"
               >
@@ -179,12 +203,17 @@ export default function Home() {
 
       {/* Gallery Section */}
       <section className="py-20 overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4 mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-6xl mx-auto px-4 mb-16"
+        >
           <div className="text-center">
             <h2 className="text-4xl font-serif mb-4 text-gold">Visual Showcase</h2>
             <div className="h-1 w-20 bg-gold mx-auto" />
           </div>
-        </div>
+        </motion.div>
         
         {/* Auto Animating Marquee */}
         <div className="relative flex overflow-hidden w-full group">
@@ -284,10 +313,15 @@ export default function Home() {
       <section id="register" className="py-20 px-4 bg-[#0a0a0a] relative overflow-hidden">
         <div className="max-w-3xl mx-auto relative z-10">
           <div className="bg-black/60 backdrop-blur-md p-8 md:p-12 rounded-3xl border border-gold/30 shadow-2xl">
-            <div className="text-center mb-10">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-10"
+            >
               <h2 className="text-4xl font-serif mb-4 text-gold">Join the Experience</h2>
               <p className="text-gray-400">Register now to secure your exclusive wedding show offer.</p>
-            </div>
+            </motion.div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
