@@ -124,8 +124,15 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="mt-10"
+            className="mt-10 flex flex-col items-center gap-6"
           >
+            <Image 
+              src="/gallery/logo_wedding_show.png" 
+              alt="Wedding Show Logo" 
+              width={300} 
+              height={150}
+              className="w-48 md:w-64 h-auto"
+            />
             <a href="#register" className="bg-gold hover:bg-gold-light text-black px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105">
               Claim Your Offer
             </a>
