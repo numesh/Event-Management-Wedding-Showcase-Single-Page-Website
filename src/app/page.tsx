@@ -14,10 +14,12 @@ import {
   Facebook,
   Phone,
   Mail,
-  MapPin
+  MapPin,
+  MessageCircle
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { registerAction } from "./actions/register";
 
 const services = [
   { icon: <Calendar className="w-8 h-8" />, name: "Event Planning", desc: "Meticulous planning for your perfect day." },
@@ -41,10 +43,23 @@ const galleryImages = [
 
 export default function Home() {
   const [formStatus, setFormStatus] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormStatus("Thank you for registering! We will contact you soon.");
+    setIsSubmitting(true);
+    setFormStatus("");
+
+    const formData = new FormData(e.currentTarget);
+    const result = await registerAction(formData);
+
+    if (result.success) {
+      setFormStatus("Thank you for registering! We will contact you soon.");
+      (e.target as HTMLFormElement).reset();
+    } else {
+      setFormStatus(result.error || "Something went wrong.");
+    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -172,33 +187,59 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium mb-2">Couple&apos;s Names</label>
-                  <input required className="w-full bg-white/5 border border-gold/20 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" />
+                  <input name="names" required className="w-full bg-white/5 border border-gold/20 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Contact Number</label>
-                  <input required type="tel" className="w-full bg-white/5 border border-gold/20 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" />
+                  <input name="phone" required type="tel" className="w-full bg-white/5 border border-gold/20 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Event Date</label>
-                <input required type="date" className="w-full bg-white/5 border border-gold/20 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" />
+                <input name="date" required type="date" className="w-full bg-white/5 border border-gold/20 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Interest</label>
-                <select className="w-full bg-white/5 border border-gold/20 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all">
+                <select name="interest" className="w-full bg-white/5 border border-gold/20 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all">
                   <option className="bg-black">Full Wedding Package</option>
                   <option className="bg-black">Photography & Videography</option>
                   <option className="bg-black">Decorations</option>
                   <option className="bg-black">Other Services</option>
                 </select>
               </div>
-              <button type="submit" className="w-full bg-gold hover:bg-gold-light text-black font-bold py-4 rounded-lg transition-all transform hover:translate-y-[-2px]">
-                Register for Exclusive Offer
+              <button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="w-full bg-gold hover:bg-gold-light text-black font-bold py-4 rounded-lg transition-all transform hover:translate-y-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Sending..." : "Register for Exclusive Offer"}
               </button>
               {formStatus && (
-                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center text-green-400 font-bold mt-4">
-                  {formStatus}
-                </motion.p>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className={`text-center p-6 rounded-xl border mt-4 ${
+                    formStatus.includes("Thank you") 
+                      ? "bg-green-500/10 border-green-500/20 text-green-400" 
+                      : "bg-red-500/10 border-red-500/20 text-red-400"
+                  }`}
+                >
+                  <p className="font-bold mb-4">{formStatus}</p>
+                  {formStatus.includes("Thank you") && (
+                    <div className="space-y-4">
+                      <p className="text-sm text-gray-300">Join our WhatsApp channel to stay updated with more offers and mythic moments!</p>
+                      <a 
+                        href="https://whatsapp.com/channel/0029Vb0CrfAJENxzGYPkR71L" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white px-6 py-3 rounded-full font-bold transition-all transform hover:scale-105"
+                      >
+                        <MessageCircle className="w-5 h-5" />
+                        Join WhatsApp Channel
+                      </a>
+                    </div>
+                  )}
+                </motion.div>
               )}
             </form>
           </div>
@@ -237,11 +278,14 @@ export default function Home() {
               <a href="https://www.facebook.com/asgardevents/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-gold hover:text-black transition-all">
                 <Facebook className="w-6 h-6" />
               </a>
+              <a href="https://whatsapp.com/channel/0029Vb0CrfAJENxzGYPkR71L" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-gold hover:text-black transition-all">
+                <MessageCircle className="w-6 h-6" />
+              </a>
               <a href="#" className="p-3 bg-white/5 rounded-full hover:bg-gold hover:text-black transition-all">
                 <Instagram className="w-6 h-6" />
               </a>
-              <a href="#" className="p-3 bg-white/5 rounded-full hover:bg-gold hover:text-black transition-all flex items-center justify-center font-bold text-lg">
-                <span className="text-sm">TikTok</span>
+              <a href="https://www.tiktok.com/@asgardevents" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-gold hover:text-black transition-all flex items-center justify-center font-bold">
+                <span className="text-xs">TikTok</span>
               </a>
             </div>
             <p className="mt-6 text-sm text-gray-500">@asgardevents</p>
