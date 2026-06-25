@@ -92,7 +92,8 @@ export default function Home() {
       <section className="h-screen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image 
-            src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=2000"
+            // src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=2000"
+              src="/gallery/cover_1.jpg"
             alt="Luxury Wedding"
             fill
             className="object-cover opacity-40"
@@ -108,6 +109,14 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="text-5xl md:text-8xl font-serif mb-4"
           >
+            <Image
+                src="/gallery/company_logo.png"
+                alt="Asgard Events Logo"
+                width={400}
+                height={160}
+                className="mx-auto h-86 md:h-90 w-auto opacity-70"
+                priority
+            />
             Create <span className="gold-gradient">Mythic Moments</span>
           </motion.h1>
           <motion.p 
@@ -129,9 +138,9 @@ export default function Home() {
             <Image 
               src="/gallery/logo_wedding_show.png" 
               alt="Wedding Show Logo" 
-              width={300} 
-              height={150}
-              className="w-48 md:w-64 h-auto"
+              width={500} 
+              height={250}
+              className="w-64 md:w-76 h-auto"
             />
             <a href="#register" className="bg-gold hover:bg-gold-light text-black px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105">
               Claim Your Offer
