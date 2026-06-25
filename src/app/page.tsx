@@ -80,16 +80,16 @@ export default function Home() {
   return (
     <main className="relative">
       {/* Sticky Offer Banner */}
-      <motion.div 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-gold text-black py-2 px-4 text-center font-bold shadow-lg"
+      <motion.div
+          initial={{ y: -100 }}
+          animate={{ y: 0 }}
+          className="fixed top-0 left-0 right-0 z-50 bg-gold text-black py-2 px-4 text-center font-bold shadow-lg"
       >
         🎁 Special Wedding Show Offer: 1st 10 couples registered for a Full Wedding Package get a FREE Pre-shoot coverage!
       </motion.div>
 
       {/* Hero Section */}
-      <section className="h-screen relative flex items-center justify-center overflow-hidden">
+      <section className="min-h-screen relative flex items-center justify-center overflow-hidden pt-22 pb-2 md:pt-0 md:pb-0">
         <div className="absolute inset-0 z-0">
           <Image 
             // src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=2000"
@@ -114,7 +114,7 @@ export default function Home() {
                 alt="Asgard Events Logo"
                 width={400}
                 height={160}
-                className="mx-auto h-86 md:h-90 w-auto opacity-70"
+                className="mx-auto h-[236px] md:h-[380px] w-auto opacity-70 block mb-[-30px] md:mb-[-50px]"
                 priority
             />
             Create <span className="gold-gradient">Mythic Moments</span>
