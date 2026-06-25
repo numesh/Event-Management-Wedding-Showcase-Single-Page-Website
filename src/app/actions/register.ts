@@ -20,7 +20,7 @@ export async function registerAction(formData: FormData) {
 
     const { data, error } = await resend.emails.send({
       from: "Asgard Events <onboarding@resend.dev>",
-      to: ["spndilusha@gmail.com"],
+      to: ["asgardeventsl@gmail.com"],
       subject: `New Wedding Registration: ${names}`,
       html: `
         <div style="font-family: sans-serif; padding: 20px; border: 1px solid #D4AF37; border-radius: 10px;">
