@@ -175,12 +175,12 @@ export default function Home() {
             transition={{ delay: 0.8 }}
             className="mt-10 flex flex-col items-center gap-6"
           >
-            <Image 
-              src="/gallery/logo_wedding_show.png" 
-              alt="Wedding Show Logo" 
-              width={500} 
-              height={250}
-              className="w-64 md:w-76 h-auto"
+            <Image
+                src="/gallery/logo_wedding_show.png"
+                alt="Wedding Show Logo"
+                width={500}
+                height={250}
+                className="w-64 md:w-76 h-auto"
             />
             <a href="#register" className="bg-gold hover:bg-gold-light text-black px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105">
               Claim Your Offer
@@ -246,7 +246,7 @@ export default function Home() {
             {[...galleryImages, ...galleryImages].map((src, index) => (
               <div
                 key={index}
-                className="relative h-64 md:h-80 w-64 md:w-96 flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group/item"
+                className="relative h-[400px] md:h-[550px] w-[300px] md:w-[400px] flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group/item"
                 onClick={() => setSelectedImage(src)}
               >
                 <Image 
@@ -275,7 +275,7 @@ export default function Home() {
             {[...galleryImages, ...galleryImages].map((src, index) => (
               <div
                 key={`rev-${index}`}
-                className="relative h-64 md:h-80 w-64 md:w-96 flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group/item"
+                className="relative h-[400px] md:h-[550px] w-[300px] md:w-[400px] flex-shrink-0 rounded-xl overflow-hidden cursor-pointer group/item"
                 onClick={() => setSelectedImage(src)}
               >
                 <Image 
