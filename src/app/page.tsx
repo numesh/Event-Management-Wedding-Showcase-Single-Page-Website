@@ -35,6 +35,22 @@ const services = [
 ];
 
 const galleryImages = [
+  "/gallery/image1.jpg",
+  "/gallery/image2.jpg",
+  "/gallery/image3.jpg",
+  "/gallery/image4.jpg",
+  "/gallery/image5.jpg",
+  "/gallery/image6.jpg",
+  "/gallery/image7.jpeg",
+  "/gallery/image8.jpg",
+  "/gallery/image9.jpg",
+  "/gallery/image10.jpg",
+  "/gallery/image11.jpg",
+];
+
+// Backup of previous gallery images
+/*
+const backupGalleryImages = [
   "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800",
   "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800",
   "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=800",
@@ -44,6 +60,7 @@ const galleryImages = [
   "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=800",
   "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&q=80&w=800",
 ];
+*/
 
 export default function Home() {
   const [formStatus, setFormStatus] = useState("");
